@@ -12,8 +12,10 @@ string nfa_transitions[N][N]; // indexing(states) according to the order of nfa_
 char dfa_starting_state;
 string dfa_states[N];
 string dfa_transitions[N][N];
+int number_of_dfa_states = 0;
 
-queue <string> done, to_be_done; 
+set <string> done;
+queue <string> to_be_done; 
 
 int findIndex(char c){
     for(int i=0; i<nfa_numberOfStates; i++){
@@ -26,19 +28,96 @@ int findIndex(char c){
 void generateDFA(){
     dfa_starting_state = nfa_starting_state;
     dfa_states[0] = dfa_starting_state;
-    done.push(dfa_states[0]);
+    number_of_dfa_states++;
+    done.insert(dfa_states[0]);
     int index = findIndex(dfa_starting_state);
+    dfa_transitions[0][0] = nfa_transitions[index][0];
+    dfa_transitions[0][1] = nfa_transitions[index][1];
     to_be_done.push(nfa_transitions[index][0]);
     to_be_done.push(nfa_transitions[index][1]);
 
     int dfa_state_index = 1;
+    bool flag = true;
     while(!to_be_done.empty()){
         string temp = to_be_done.front();
         to_be_done.pop();
-        done.push(temp);
-        dfa_states[dfa_state_index++] = temp;
-
+        if(done.count(temp))
+            flag = false;
+        else 
+            flag = true;
         
+        if(flag){
+            done.insert(temp);
+            dfa_states[dfa_state_index] = temp;
+            number_of_dfa_states++;
+
+            string zero_temp, one_temp;
+            for(int i=0; i<temp.size(); i++){
+                char c = temp[i];
+                if(c != ' '){
+                    int index = findIndex(c);
+                    zero_temp += nfa_transitions[index][0];
+                    one_temp += nfa_transitions[index][1];
+                }
+            }
+            // geting unique elements
+            set<char> temp;
+            for(int i=0; i<zero_temp.size(); i++){
+                if(zero_temp[i]!= ' ')
+                    temp.insert(zero_temp[i]);
+            }
+            zero_temp.clear();
+            set<char>:: iterator it;
+            for( it = temp.begin(); it!=temp.end(); ++it){
+                zero_temp += *it;
+                zero_temp += ' ';
+            }
+
+            temp.clear();
+            for(int i=0; i<one_temp.size(); i++){
+                if(one_temp[i]!= ' ')
+                    temp.insert(one_temp[i]);
+            }
+            one_temp.clear();
+            set<char>:: iterator it1;
+            for( it1 = temp.begin(); it1!=temp.end(); ++it1){
+                one_temp += *it1;
+                one_temp += ' ';
+            }
+
+            zero_temp = zero_temp.substr(0, zero_temp.size()-1);
+            one_temp = one_temp.substr(0, one_temp.size()-1);
+            dfa_transitions[dfa_state_index][0] = zero_temp;
+            dfa_transitions[dfa_state_index][1] = one_temp;
+            dfa_state_index++;
+            to_be_done.push(zero_temp);
+            to_be_done.push(one_temp);
+        }
+    }
+}
+
+void printDFA(){
+    cout<<endl<<"--------DFA-------"<<endl;
+    cout<<"DFA statring state: "<<dfa_starting_state<<endl;
+    cout<<"DFA final states: ";
+    bool flag = false;
+    for(int i=0; i<number_of_dfa_states; i++){
+        string temp = dfa_states[i];
+        for(int j=0; j<temp.size(); j++){
+            for(int k=0; k<nfa_numberOfFinalStates; k++){
+                if(nfa_final_states[k]==temp[j]){
+                    flag = true;
+                }
+                else flag = false;
+            }
+        }
+        if(flag)
+            cout<<temp<<" ";
+    }
+    cout<<endl<<"-----------DFA Transitions----------"<<endl;
+    for(int i=0; i<number_of_dfa_states; i++){
+        cout<<dfa_states[i]<<"\tusing 0 goes to: "<<dfa_transitions[i][0]<<endl;
+        cout<<dfa_states[i]<<"\tusing 1 goes to: "<<dfa_transitions[i][1]<<endl;
     }
 }
 
@@ -85,6 +164,7 @@ int main(void){
             s += ' ';
             cin>>c;
         }
+        s = s.substr(0, s.size()-1); // to remove the last whitespace
         nfa_transitions[i][0] = s;
         cout<<endl;
 
@@ -98,11 +178,19 @@ int main(void){
             t += ' ';
             cin>>ch;
         }
+        t = t.substr(0, t.size()-1); // to remove the last whitespace
         nfa_transitions[i][1] = t;
         cout<<endl;
     }
 
+    // cout<<"-----------NFA----------"<<endl;
+    // for(int i=0; i<nfa_numberOfStates; i++){
+    //     cout<<nfa_states[i]<<" using 0 goes to: "<<nfa_transitions[i][0]<<endl;
+    //     cout<<nfa_states[i]<<" using 1 goes to: "<<nfa_transitions[i][1]<<endl;
+    // }
+
     generateDFA();
+    printDFA();
 
     return 0;
 }
