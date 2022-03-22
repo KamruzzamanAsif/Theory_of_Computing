@@ -100,19 +100,20 @@ void printDFA(){
     cout<<endl<<"--------DFA-------"<<endl;
     cout<<"DFA statring state: "<<dfa_starting_state<<endl;
     cout<<"DFA final states: ";
-    bool flag = false;
+    
     for(int i=0; i<number_of_dfa_states; i++){
         string temp = dfa_states[i];
+        bool flag = false;
         for(int j=0; j<temp.size(); j++){
             for(int k=0; k<nfa_numberOfFinalStates; k++){
                 if(nfa_final_states[k]==temp[j]){
                     flag = true;
                 }
-                else flag = false;
+                //else flag = false;
             }
         }
         if(flag)
-            cout<<temp<<" ";
+            cout<<temp<<"   ";
     }
     cout<<endl<<"-----------DFA Transitions----------"<<endl;
     for(int i=0; i<number_of_dfa_states; i++){
@@ -122,7 +123,8 @@ void printDFA(){
 }
 
 int main(void){
-    freopen("nfaToDfa.txt", "r", stdin);
+    //freopen("nfaToDfa.txt", "r", stdin);
+    freopen("nfa.txt", "r", stdin);
     cout<<"Enter number of states of NFA: ";
     cin>>nfa_numberOfStates;
     cout<<endl;

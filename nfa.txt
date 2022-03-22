@@ -1,0 +1,11 @@
+3
+A B C
+A
+1
+B
+B C x
+x
+x
+x
+B C x
+C x
