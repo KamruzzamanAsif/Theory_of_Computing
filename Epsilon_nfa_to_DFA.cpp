@@ -1,4 +1,9 @@
+
+//////        Not completed         //////
+
+
 #include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 #define N 100
 
@@ -9,13 +14,19 @@ int nfa_numberOfFinalStates;
 char nfa_final_states[N];
 string nfa_transitions[N][N]; // indexing(states) according to the order of nfa_states
 
-char dfa_starting_state;
+string dfa_starting_state;
 string dfa_states[N];
 string dfa_transitions[N][N];
 int number_of_dfa_states = 0;
 
 set <string> done;
 queue <string> to_be_done; 
+
+string eclose(string s){
+    string temp;
+
+    return temp;
+}
 
 int findIndex(char c){
     for(int i=0; i<nfa_numberOfStates; i++){
@@ -26,7 +37,7 @@ int findIndex(char c){
 }
 
 void generateDFA(){
-    dfa_starting_state = nfa_starting_state;
+    dfa_starting_state = eclose(nfa_starting_state);
     dfa_states[0] = dfa_starting_state;
     number_of_dfa_states++;
     done.insert(dfa_states[0]);
@@ -202,12 +213,27 @@ int main(void){
         t = t.substr(0, t.size()-1); // to remove the last whitespace
         nfa_transitions[i][1] = t;
         cout<<endl;
+        
+        cout<<nfa_states[i]<<" using 'epsilon' goes to: ";
+        cout<<"(enter the states (enter 'x' to stop))";
+        char c2;
+        string u;
+        cin>>c2;
+        while(c2!='x'){
+            u += c2;
+            u += ' ';
+            cin>>c2;
+        }
+        u = u.substr(0, u.size()-1); // to remove the last whitespace
+        nfa_transitions[i][2] = u;
+        cout<<endl;
     }
 
     // cout<<"-----------NFA----------"<<endl;
     // for(int i=0; i<nfa_numberOfStates; i++){
     //     cout<<nfa_states[i]<<" using 0 goes to: "<<nfa_transitions[i][0]<<endl;
     //     cout<<nfa_states[i]<<" using 1 goes to: "<<nfa_transitions[i][1]<<endl;
+    //     cout<<nfa_states[i]<<" using 'epsilon' goes to: "<<nfa_transitions[i][2]<<endl;
     // }
 
     generateDFA();
