@@ -1,75 +1,84 @@
+/* Problem: Build a CFG that accepts or rejects a 
+   given input based on the following grammar-
+          E -> E + E
+          E -> E * E
+          E -> (E)
+          E -> 0|1
+*/
+
+#include <bits/stdc++.h>
 #include <iostream>
 using namespace std;
-string input, maching;
-string production[3]={"E+E","E*E","(E)"};
+string input;
 int n;
+string production[3]={"E+E","E*E","(E)"};
+string temp;
 
-int strLength(string s){
-    return s.length();
-}
 
 bool check(int start)
 {
-    int dis=0;
+    for(int i=start; i<start+3; i++)
+        temp += input[i];
+
+    int flag=0;
     for(int i=0;i<3;i++)
     {
-        if((input[start]==production[i][0])
-              &&(input[start+1]==production[i][1])
-              &&(input[start+2]==production[i][2]))
-        {
-            dis=1;
+        if(production[i]==temp){
+            flag = 1;
             break;
         }
     }
-    if(dis==1) return true;
+    temp.clear();
+
+    if(flag==1) 
+        return true;
     else 
         return false;
-   
+    
 }
 
-void stringShortener(int start)
-{
-    input[start]='E';
-    for(int i=start; i<n-3;i++)
-    {
-        input[i+1]=input[i+3];
-    }
-    n = n -3;
+void subStringRemover(int start){
+    string temp1, temp2;
+    for(int i=0; i<start; i++)
+        temp1 += input[i];
+    for(int i=start+3; i<input.length(); i++)
+        temp2 += input[i];
+    input = temp1 + "E" + temp2;
 }
 
 
 int main()
 {
-    cout<<"Enter string: ";
+    cout<<"Enter input as string: ";
     cin>>input;
     n = input.length();
     
-    int i, j;
-    for(i=0;i<n;i++)
+    for(int i=0;i<n;i++)
     {
         if((input[i]=='0')||(input[i]=='1'))
-        input[i]='E';
+            input[i]='E';
     }
 
     
-    for(i=0;i<(strLength(input)-1);i++)
+    for(int i=0;i<input.length()-1; )
     {
         if(check(i))
         {
-            stringShortener(i);
-            i=0;
+            subStringRemover(i);
+            i=0; // traverse the string again!
         }
-        if(n<2)
-        {
+        else
+            i++;
+
+        if(input.length()<=1)
             break;
-        }
     }
 
 
-    if((n==1)||(n==0))
+    if((input.length()==1)||(input.length()==0))
         cout<<"Accepted!"<<endl;
     else
-        cout<<"Not accepted"<<endl;
+        cout<<"Not accepted!"<<endl;
     
     return 0;
 }
