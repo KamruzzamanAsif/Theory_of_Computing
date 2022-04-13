@@ -29,8 +29,6 @@ void print_pda_stack(){
         cout << t << " ";
         temp.pop();
  
-        // To restore contents of
-        // the original stack.
         pda_stack.push(t); 
     }
 }
@@ -73,9 +71,10 @@ int main(void){
 
     // Accepted or Rejected?
     if(flag == 1){
-        cout<<"\nAccepted\nFor index = "<<accepting_index<<endl;
+        cout<<"\nAccepted!"<<endl;
         // Now print
         cout<<"From  Using  To\t Current Stack\n";
+        cout<<"----- -----  --\t -------------\n";
         clear_pda_stack();
         for(int i=0; i<accepting_index; i++){
             cout<<" A >>> "<<input_string[i]<<" >>> A";
@@ -100,7 +99,7 @@ int main(void){
         }
     }
     else
-        cout<<"\nRejected\n";
+        cout<<"\nRejected!\n";
     
     return 0;
 }
