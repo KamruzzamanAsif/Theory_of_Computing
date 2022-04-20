@@ -1,0 +1,6 @@
+A B phi C     
+B phi D phi
+C C C phi
+stop
+A
+D

@@ -1,4 +1,3 @@
-
 //////        Not completed         //////
 
 
@@ -12,7 +11,7 @@ char nfa_states[N];
 char nfa_starting_state;
 int nfa_numberOfFinalStates;
 char nfa_final_states[N];
-string nfa_transitions[N][N]; // indexing(states) according to the order of nfa_states
+string nfa_transitions[N][N][N]; // indexing(states) according to the order of nfa_states
 
 string dfa_starting_state;
 string dfa_states[N];
@@ -153,8 +152,7 @@ void printDFA(){
 }
 
 int main(void){
-    freopen("nfaToDfa.txt", "r", stdin);
-    //freopen("nfa.txt", "r", stdin);
+    freopen("eNfaToDfa.txt", "r", stdin);
     cout<<"Enter number of states of NFA: ";
     cin>>nfa_numberOfStates;
     cout<<endl;
